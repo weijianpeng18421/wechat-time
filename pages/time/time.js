@@ -6,7 +6,7 @@
       hour, min, sec
     if (dis <= 0) return {
       code: 1,
-      data: "活动已经开始"
+      data: "结束"
     }
     hour = parseInt(dis / 1000 / 60 / 60)
     min = parseInt((dis - hour * 60 * 60 * 1000) / 1000 / 60)
@@ -22,6 +22,9 @@
   }
 
   // 以上时间
+  var util = require("../../utils/util.js")
+  // var TIME = util.formatTime(new Date());
+  // console.log(TIME)
   var setTime = "2020/12/02 18:00:00"
   Page({
 
@@ -29,54 +32,20 @@
      * 页面的初始数据
      */
     data: {
-      time: '12:01',
+      timeStart: '09:00',
+      allStartTime: '',
+      timeEnd: '18:00',
+      allEndTime: null,
       region: ['宁夏回族自治区', '银川市', '西夏区'],
-      loading: true,
-
-      timeDown: setTime,
-      timeShow: splitTime(setTime).data,
+      timeShow: null,
+      percentStart: '70%',
+      percentEnd: '30%'
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-      var that = this
-      var to = that.data.timeShow
-
-      function updateTime(cbk) {
-        var curTime = splitTime(that.data.timeDown)
-        if (curTime.code) {
-          clearTimeout(to);
-          cbk && cbk(curTime.data);
-          return
-        }
-        var {
-          hour,
-          min,
-          sec,
-        } = curTime.data
-
-        setTimeout(function () {
-          that.setData({
-            "timeShow.sec": sec,
-            "timeShow.min": min,
-            "timeShow.hour": hour
-          })
-        }, 500)
-
-        to = setTimeout(function () {
-          updateTime(cbk)
-        }, 1000)
-      }
-      // 开启计时
-      updateTime(function (info) {
-        wx.showToast({
-          title: info,
-          icon: 'success',
-          duration: 2000
-        })
-      })
 
     },
 
@@ -93,56 +62,101 @@
     onShow: function () {
 
     },
-
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
-    onHide: function () {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload: function () {
-
-    },
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh: function () {
-
-    },
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom: function () {
-
-    },
-
     /**
      * 用户点击右上角分享
      */
     onShareAppMessage: function () {
 
     },
+    // 确认修改
+    ConfigFixedTime: function () {
+      var that = this
+      that.BeginTimeDown()
+    },
+    // 取消修改
+    CancelFixedTime: function () {
+
+    },
 
     // 时间选择
     TimeChange(e) {
-      this.setData({
-        time: e.detail.value
-      })
+      var that = this
+      let type = e.target.dataset.type
+      if (type == "timeStart") {
+        that.setData({
+          timeStart: e.detail.value
+        })
+
+        var start = util.formatTime(new Date()).substring(0, 11) + e.detail.value;
+        that.setData({
+          allStartTime: start
+        })
+      } else if (type == "timeEnd") {
+        that.setData({
+          timeEnd: e.detail.value
+        })
+        var end = util.formatTime(new Date()).substring(0, 11) + e.detail.value;
+        that.setData({
+          allEndTime: end
+        })
+
+      } else {
+        wx.showModal({
+          title: '错误提示',
+          content: '时间选择错误',
+          showCancel: false,
+        })
+      }
+
     },
     // 地址选择
     RegionChange: function (e) {
-      this.setData({
+      var that = this
+      console.log("---------地址：", e)
+      that.setData({
         region: e.detail.value
       })
     },
+    // 开始倒计时
+    BeginTimeDown: function () {
+      var that = this;
+      var temp = setInterval(function () {
+        var now = new Date().getTime()
+        var target = new Date(that.data.allEndTime).getTime()
+        var dis = target - now
+        var hour, min, sec
+        let finalValue = null
+        if (dis <= 0) {
+          finalValue = {
+            code: 1,
+            data: "结束"
+          }
+          that.setData({
+            timeShow: finalValue
+          })
+        }
+        hour = parseInt(dis / 1000 / 60 / 60)
+        min = parseInt((dis - hour * 60 * 60 * 1000) / 1000 / 60)
+        sec = parseInt((dis - hour * 60 * 60 * 1000 - min * 1000 * 60) / 1000)
+        finalValue = {
+          code: 0,
+          data: {
+            hour: (hour + "").length == 1 ? "0" + hour : hour,
+            min: (min + "").length == 1 ? "0" + min : min,
+            sec: (sec + "").length == 1 ? "0" + sec : sec,
+          }
+        }
+        that.setData({
+          timeShow: finalValue
+        })
+        // 计算百分比
+        var begin = new Date(that.data.allStartTime).getTime()
+        that.setData({
+          percentStart: (((now - begin) / (target - begin)).toFixed(3) * 100) + "%",
+          percentEnd: ((1 - (now - begin) / (target - begin))).toFixed(3) * 100 + "%",
+        })
 
-
-
+      }, 1000)
+    }
 
   })

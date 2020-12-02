@@ -12,9 +12,10 @@
         <!-- 时间 -->
         <view class="cu-form-group">
           <view class="title">时间选择</view>
-          <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="TimeChange">
+          <picker mode="time" value="{{timeStart}}" start="00:00" end="23:59" data-type="timeStart"
+            bindchange="TimeChange">
             <view class="picker">
-              {{time}}
+              {{timeStart}}
             </view>
           </picker>
         </view>
@@ -32,9 +33,9 @@
         <!-- 时间 -->
         <view class="cu-form-group">
           <view class="title">时间选择</view>
-          <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="TimeChange">
+          <picker mode="time" value="{{timeEnd}}" start="00:00" end="23:59" data-type="timeEnd" bindchange="TimeChange">
             <view class="picker">
-              {{time}}
+              {{timeEnd}}
             </view>
           </picker>
         </view>
@@ -52,7 +53,8 @@
         <!-- 地址 -->
         <view class="cu-form-group">
           <view class="title">地址选择</view>
-          <picker mode="region" bindchange="RegionChange" value="{{region}}" custom-item="{{customItem}}">
+          <picker mode="region" bindchange="RegionChange" value="{{region}}" data-type="region"
+            custom-item="{{customItem}}">
             <view class="picker">
               {{region[0]}}，{{region[1]}}，{{region[2]}}
             </view>
@@ -64,20 +66,20 @@
 
   <view class="btn-style">
     <view class="padding flex flex-direction">
-      <button class="cu-btn bg-blue margin-tb-sm lg">确认修改时间</button>
+      <button class="cu-btn bg-blue margin-tb-sm lg" bindtap="ConfigFixedTime">确认修改时间</button>
     </view>
     <view class="padding flex flex-direction">
-      <button class="cu-btn block line-blue margin-tb-sm lg">取消修改时间</button>
+      <button class="cu-btn block line-blue margin-tb-sm lg" bindtap="CancelFixedTime">取消修改时间</button>
     </view>
   </view>
 
   <!-- 距离下班时间显示 -->
   <view>
-    <view class="time-style">
+    <view class="time-style" wx:if="{{timeShow.data}}">
       <view class="grid col-6 margin-bottom text-center">
         <view class="time-style-item">
           <view>
-            {{timeShow.hour}}
+            {{timeShow.data.hour}}
           </view>
         </view>
         <view class="time-style-item-text">
@@ -87,7 +89,7 @@
         </view>
         <view class="time-style-item">
           <view>
-            {{timeShow.min}}
+            {{timeShow.data.min}}
           </view>
         </view>
         <view class="time-style-item-text">
@@ -97,7 +99,7 @@
         </view>
         <view class="time-style-item">
           <view>
-            {{timeShow.sec}}
+            {{timeShow.data.sec}}
           </view>
         </view>
         <view class="time-style-item-text">
@@ -116,8 +118,8 @@
     </view>
     <view class="padding bg-white">
       <view class="cu-progress radius striped active">
-        <view class="bg-red" style="width:{{loading?'50%':''}};">已度过50%</view>
-        <view class="bg-cyan" style="width:{{loading?'50%':''}};">剩余50%</view>
+        <view class="bg-cyan" style="width:{{percentStart}};">已度过{{percentStart}}</view>
+        <view class="bg-red" style="width:{{percentEnd}};">剩余{{percentEnd}}</view>
       </view>
     </view>
   </view>
