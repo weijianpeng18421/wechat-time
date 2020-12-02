@@ -1,0 +1,46 @@
+.form-style {
+  font-size: 30rpx;
+}
+
+.padding {
+  padding: 0 10rpx;
+}
+
+.btn-style {
+  margin-top: 0;
+}
+
+.gif-style {
+  background-color: black;
+  margin-top: 12rpx;
+}
+
+.cu-bar {
+  min-height: 70rpx;
+  margin: 15rpx 0;
+}
+
+/* 以下时间 */
+.time-style-item {
+  width: 22%;
+  font-weight: bold;
+  font-size: 70rpx;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgb(168, 168, 168);
+}
+
+.time-style-item-text {
+  width: 11.2%;
+  color: rgb(129, 129, 129);
+  font-size: 48rpx;
+  font-weight: bold;
+}
+
+.time-style {
+  color: #db3134;
+  margin: 0 5% 0 5%;
+  height: 100rpx;
+  line-height: 100rpx;
+  margin-top: 12rpx;
+}

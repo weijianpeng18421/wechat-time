@@ -1,0 +1,12 @@
+{
+  "pages":[
+    "pages/time/time"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "梦里什么都有",
+    "navigationBarTextStyle":"black"
+  },
+  "sitemapLocation": "sitemap.json"
+}
