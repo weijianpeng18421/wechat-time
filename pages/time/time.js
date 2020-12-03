@@ -33,20 +33,31 @@
      */
     data: {
       timeStart: '09:00',
-      allStartTime: '',
+      allStartTime: '09:00',
       timeEnd: '18:00',
-      allEndTime: null,
+      allEndTime: '18:00',
       region: ['宁夏回族自治区', '银川市', '西夏区'],
       timeShow: null,
-      percentStart: '70%',
-      percentEnd: '30%'
+      percentStart: 70,
+      percentEnd: 30
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+      var that = this
+      var start = util.formatTime(new Date()).substring(0, 11) + '09:00';
+      that.setData({
+        allStartTime: start
+      })
 
+      var end = util.formatTime(new Date()).substring(0, 11) + '18:00';
+      that.setData({
+        allEndTime: end
+      })
+
+      that.BeginTimeDown()
     },
 
     /**
@@ -152,8 +163,8 @@
         // 计算百分比
         var begin = new Date(that.data.allStartTime).getTime()
         that.setData({
-          percentStart: (((now - begin) / (target - begin)).toFixed(3) * 100) + "%",
-          percentEnd: ((1 - (now - begin) / (target - begin))).toFixed(3) * 100 + "%",
+          percentStart: (((now - begin) / (target - begin)).toFixed(3) * 100),
+          percentEnd: ((1 - (now - begin) / (target - begin))).toFixed(3) * 100,
         })
 
       }, 1000)
