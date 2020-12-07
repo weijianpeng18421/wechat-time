@@ -44,3 +44,13 @@
   line-height: 100rpx;
   margin-top: 12rpx;
 }
+
+.screen-swiper {
+  min-height: 1400rpx;
+  width: 100%;
+}
+
+.screen-video {
+  min-height: 350rpx;
+  width: 100%;
+}

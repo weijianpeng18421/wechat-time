@@ -39,7 +39,41 @@
       region: ['宁夏回族自治区', '银川市', '西夏区'],
       timeShow: null,
       percentStart: 70,
-      percentEnd: 30
+      percentEnd: 30,
+      videoList: [{
+        id: 0,
+        type: 'video',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/00.mp4?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
+      }],
+      swiperList: [{
+        id: 0,
+        type: 'image',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/01.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608',
+      }, {
+        id: 1,
+        type: 'image',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/02.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
+      }, {
+        id: 2,
+        type: 'image',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/03.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
+      }, {
+        id: 3,
+        type: 'image',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/04.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
+      }, {
+        id: 4,
+        type: 'image',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/05.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
+      }, {
+        id: 5,
+        type: 'image',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/06.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
+      }, {
+        id: 6,
+        type: 'image',
+        url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/07.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
+      }],
     },
 
     /**
@@ -51,6 +85,8 @@
       that.setData({
         allStartTime: start
       })
+      // 从云开发中获取图片
+
 
       var end = util.formatTime(new Date()).substring(0, 11) + '18:00';
       that.setData({
