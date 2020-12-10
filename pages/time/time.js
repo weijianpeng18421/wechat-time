@@ -1,4 +1,10 @@
 var util = require("../../utils/util.js")
+// wx.cloud.init({
+//   env: 'wjp1842133',
+//   traceUser: true,
+// })
+wx.cloud.init()
+var db = wx.cloud.database()
 
 Page({
   /**
@@ -13,40 +19,8 @@ Page({
     timeShow: null,
     percentStart: 70,
     percentEnd: 30,
-    videoList: [{
-      id: 0,
-      type: 'video',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/00.mp4?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
-    }],
-    swiperList: [{
-      id: 0,
-      type: 'image',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/01.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608',
-    }, {
-      id: 1,
-      type: 'image',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/02.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
-    }, {
-      id: 2,
-      type: 'image',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/03.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
-    }, {
-      id: 3,
-      type: 'image',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/04.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
-    }, {
-      id: 4,
-      type: 'image',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/05.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
-    }, {
-      id: 5,
-      type: 'image',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/06.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
-    }, {
-      id: 6,
-      type: 'image',
-      url: 'https://776a-wjp1842133-1256216380.tcb.qcloud.la/beautif/07.png?sign=f1a6419a9458ecfc2d8822fb9668a3ad&t=1607325608'
-    }],
+    videoList: [],
+    swiperList: [],
   },
 
   /**
@@ -54,6 +28,7 @@ Page({
    */
   onLoad: function (options) {
     var that = this
+    that.getCloudData()
 
     var start = util.formatTime(new Date()).substring(0, 11) + that.data.timeStart;
     that.setData({
@@ -65,17 +40,10 @@ Page({
       allEndTime: end
     })
 
-    // 从云开发中获取图片
-
-    // 如果当前时间是下午六点之前 则以六点为结束时间  如果超过了下午六点 则以当前时间加一小时为结束时间（防止出现负的时间）
-    // 结束时间永远大于开始时间     开始时间和结束时间设置完了点修改按钮才生效否则使用默认值      把地方用起来   调节视频和照片的大小
     let curData = util.formatTime(new Date()).substring(0, 11)
-    // console.log(curData)
     let curHour = parseInt(util.formatTime(new Date()).substring(11, 13))
-    // let curHour = 20
     let startHour = parseInt(that.data.timeStart.substring(0, 2))
     let endHour = parseInt(that.data.timeEnd.substring(0, 2))
-    console.log(curHour, startHour, endHour)
     if (0 <= curHour && curHour < startHour) {
       that.setData({
         allStartTime: curData + '00:00',
@@ -137,7 +105,6 @@ Page({
       that.setData({
         timeStart: e.detail.value
       })
-
       var start = util.formatTime(new Date()).substring(0, 11) + e.detail.value;
       that.setData({
         allStartTime: start
@@ -161,13 +128,13 @@ Page({
 
   },
   // 地址选择
-  RegionChange: function (e) {
-    var that = this
-    console.log("---------地址：", e)
-    that.setData({
-      region: e.detail.value
-    })
-  },
+  // RegionChange: function (e) {
+  //   var that = this
+  //   console.log("---------地址：", e)
+  //   that.setData({
+  //     region: e.detail.value
+  //   })
+  // },
   // 开始倒计时
   BeginTimeDown: function () {
     var that = this;
@@ -176,6 +143,10 @@ Page({
       var target = new Date(that.data.allEndTime).getTime()
       var dis = target - now
       var hour, min, sec
+      hour = parseInt(dis / 1000 / 60 / 60)
+      min = parseInt((dis - hour * 60 * 60 * 1000) / 1000 / 60)
+      sec = parseInt((dis - hour * 60 * 60 * 1000 - min * 1000 * 60) / 1000)
+
       let finalValue = null
       if (dis <= 0) {
         finalValue = {
@@ -185,16 +156,14 @@ Page({
         that.setData({
           timeShow: finalValue
         })
-      }
-      hour = parseInt(dis / 1000 / 60 / 60)
-      min = parseInt((dis - hour * 60 * 60 * 1000) / 1000 / 60)
-      sec = parseInt((dis - hour * 60 * 60 * 1000 - min * 1000 * 60) / 1000)
-      finalValue = {
-        code: 0,
-        data: {
-          hour: (hour + "").length == 1 ? "0" + hour : hour,
-          min: (min + "").length == 1 ? "0" + min : min,
-          sec: (sec + "").length == 1 ? "0" + sec : sec,
+      } else {
+        finalValue = {
+          code: 0,
+          data: {
+            hour: (hour + "").length == 1 ? "0" + hour : hour,
+            min: (min + "").length == 1 ? "0" + min : min,
+            sec: (sec + "").length == 1 ? "0" + sec : sec,
+          }
         }
       }
       that.setData({
@@ -202,12 +171,39 @@ Page({
       })
       // 计算百分比
       var begin = new Date(that.data.allStartTime).getTime()
+      let startTemp = (((now - begin) / (target - begin)) * 100).toString().substring(0, 4)
+      let endTemp = ((1 - (now - begin) / (target - begin)) * 100).toString().substring(0, 4)
       that.setData({
-        percentStart: (((now - begin) / (target - begin))).toFixed(3) * 100,
-        percentEnd: ((1 - (now - begin) / (target - begin))).toFixed(3) * 100,
+        percentStart: parseFloat(startTemp),
+        percentEnd: parseFloat(endTemp),
       })
-     
+
     }, 1000)
-  }
+  },
+  getCloudData: function () {
+    var that = this
+    // 访问云开发中的数据库得到图片连接
+    db.collection('image').get({
+      success: function (res) {
+        that.setData({
+          swiperList: res.data
+        })
+      },
+      fail: function (err) {
+        console.log(err)
+      }
+    })
+     // 访问云开发中的数据库得到视频连接
+     db.collection('video').get({
+      success: function (res) {
+        that.setData({
+          videoList: res.data
+        })
+      },
+      fail: function (err) {
+        console.log(err)
+      }
+    })
+  },
 
 })

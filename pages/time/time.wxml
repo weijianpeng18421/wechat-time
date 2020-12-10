@@ -117,7 +117,11 @@
     </view>
     <view class="padding bg-white">
       <view class="cu-progress radius striped active">
-        <view class="bg-cyan" style="width:{{percentStart}}%;">已度过{{percentStart}}%</view>
+        <view class="bg-cyan" style="width:{{percentStart}}%;">
+          <span wx:if="{{percentStart>14}}">
+            已过{{percentStart}}%
+          </span>
+        </view>
         <view class="bg-red" style="width:{{percentEnd}}%;">
           <span wx:if="{{percentEnd>14}}">
             剩余{{percentEnd}}%
