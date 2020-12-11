@@ -20,6 +20,7 @@ Page({
     percentStart: 70,
     percentEnd: 30,
     videoList: [],
+    videoHeight: 500,
     swiperList: [],
   },
 
@@ -68,25 +69,6 @@ Page({
     that.BeginTimeDown()
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
   // 确认修改
   // ConfigFixedTime: function () {
   //   var that = this
@@ -190,20 +172,94 @@ Page({
         })
       },
       fail: function (err) {
-        console.log(err)
+        wx.showModal({
+          title: '错误提示',
+          content: '图片请求错误:' + err,
+          showCancel: false,
+        })
       }
     })
-     // 访问云开发中的数据库得到视频连接
-     db.collection('video').get({
+    // 访问云开发中的数据库得到视频连接
+    db.collection('video').get({
       success: function (res) {
         that.setData({
           videoList: res.data
         })
+        // 设置第一个视频高度和声音
+        if (res.data[0]) {
+          that.drageFinish()
+        }
       },
       fail: function (err) {
-        console.log(err)
+        wx.showModal({
+          title: '错误提示',
+          content: '视频请求错误:' + err,
+          showCancel: false,
+        })
       }
     })
   },
-
+  downloadImage: function (e) {
+    let curUrl = e.currentTarget.dataset.info.url
+    wx.showModal({
+      title: '友情提示',
+      content: '小帅比/小美女\r\n被你发现了，轻点图片可以下载图片哦！',
+      cancelText: "取消",
+      confirmText: "下载",
+      success(res) {
+        if (res.confirm) {
+          wx.downloadFile({
+            url: curUrl,
+            success(res) {
+              if (res.statusCode === 200) {
+                wx.saveImageToPhotosAlbum({
+                  filePath: res.tempFilePath,
+                  success(res) {
+                    wx.showModal({
+                      title: '友情提示',
+                      content: '小帅比/小美女\r\n图片已经保存到你的相册了',
+                      showCancel: false,
+                    })
+                  }
+                })
+              } else {
+                wx.showModal({
+                  title: '错误提示',
+                  content: '沙雕保存失败:' + err,
+                  showCancel: false,
+                })
+              }
+            }
+          })
+        } else {
+          wx.showModal({
+            title: '友情提示',
+            content: '你是个注重身体的好娃儿\r\n少看美女，身体要紧',
+            showCancel: false,
+          })
+        }
+      }
+    })
+  },
+  drageFinish: function (e) {
+    var that = this
+    let videoContext0 = wx.createVideoContext('number-0')
+    let videoContext1 = wx.createVideoContext('number-1')
+    let curIndex = 0
+    if (e) {
+      curIndex = e.detail.current
+    }
+    let curVideoHeight = that.data.videoList[curIndex].height
+    that.setData({
+      videoHeight: curVideoHeight
+    })
+    // 切换视频
+    if (curIndex == 0) {
+      videoContext0.play()
+      videoContext1.stop()
+    } else if (curIndex == 1) {
+      videoContext0.stop()
+      videoContext1.play()
+    }
+  },
 })

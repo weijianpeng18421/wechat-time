@@ -50,11 +50,6 @@
   width: 100%;
 }
 
-.screen-video {
-  min-height: 350rpx;
-}
-
 .video-style {
   width: 100%;
-  height: 400rpx;
 }

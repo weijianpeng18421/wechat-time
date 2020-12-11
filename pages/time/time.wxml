@@ -139,16 +139,17 @@
   </view>
 
   <!-- 轮播图 -->
-  <swiper class="screen-video 'square-dot'" indicator-dots="true" circular="true" autoplay="false" interval="10000"
-    duration="1000">
+  <swiper class="square-dot" style="min-height:{{videoHeight}}rpx" indicator-dots="true" circular="true"
+    autoplay="{{false}}" interval="10000" duration="300" bindanimationfinish="drageFinish">
     <swiper-item wx:for="{{videoList}}" wx:key="index">
-      <video class="video-style" src="{{item.url}}" autoplay loop show-play-btn="{{false}}" controls="{{false}}"
+      <video id="{{item.id}}" class="video-style" style="height:{{item.height}}rpx" src="{{item.url}}"
+        autoplay="{{true}}" loop show-play-btn="{{false}}" muted="{{true}}" show-mute-btn="{{true}}" controls="{{true}}"
         object-fit="cover" wx:if="{{item.type=='video'}}"></video>
     </swiper-item>
   </swiper>
   <swiper class="screen-swiper 'square-dot'" indicator-dots="true" circular="true" autoplay="true" interval="10000"
     duration="1000">
-    <swiper-item wx:for="{{swiperList}}" wx:key="index">
+    <swiper-item wx:for="{{swiperList}}" wx:key="index" bindtap="downloadImage" data-info="{{item}}">
       <image src="{{item.url}}" mode="aspectFit" wx:if="{{item.type=='image'}}"></image>
     </swiper-item>
   </swiper>

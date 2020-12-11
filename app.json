@@ -1,13 +1,13 @@
 {
-  "pages":[
+  "pages": [
     "pages/time/time",
     "pages/test/test"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "下班倒计时",
-    "navigationBarTextStyle":"black"
+    "navigationBarTitleText": "下班计时器",
+    "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json"
 }
