@@ -99,7 +99,6 @@ Page({
       that.setData({
         allEndTime: end
       })
-
     } else {
       wx.showModal({
         title: '错误提示',
@@ -107,7 +106,6 @@ Page({
         showCancel: false,
       })
     }
-
   },
   // 地址选择
   // RegionChange: function (e) {
@@ -159,7 +157,6 @@ Page({
         percentStart: parseFloat(startTemp),
         percentEnd: parseFloat(endTemp),
       })
-
     }, 1000)
   },
   getCloudData: function () {
